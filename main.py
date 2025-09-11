@@ -1,5 +1,10 @@
 import spotipy
+import os
+from dotenv import load_dotenv
 from spotipy.oauth2 import SpotifyOAuth
+
+
+load_dotenv()  # loads variables from .env in the repo root
 
 scope = "user-library-read"
 
@@ -13,7 +18,7 @@ redirect_response = input("\nPaste FULL REDIRECT LINK: ").strip()
 
 try:
     code = auth_manager.parse_response_code(redirect_response)
-    token = auth_manager.get_access_token(code)
+    # token = auth_manager.get_access_token(code)
     
     sp = spotipy.Spotify(auth_manager=auth_manager)
     results = sp.playlist("41TSE7Yh4ZYy0xueqVg8cx")
@@ -42,7 +47,7 @@ try:
     good={}
     for song_details in results["items"]:
         song_raw=song_details["track"]
-        song={"images":song_raw[],"artists":getArtists(song_raw["artists"]),"duration_ms":[],"name":""}
+        song={"images":[],"artists":getArtists(song_raw["artists"]),"duration_ms":[],"name":""}
     
     
     # k=results["items"][0]["track"]
