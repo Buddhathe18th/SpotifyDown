@@ -3,9 +3,16 @@ from spotipy.oauth2 import SpotifyOAuth
 
 scope = "user-library-read"
 
-sp = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=scope))
+auth_manager = SpotifyOAuth(scope=scope, show_dialog=True)
+sp = spotipy.Spotify(auth_manager=auth_manager)
 
-results = sp.current_user_saved_tracks()
-for idx, item in enumerate(results['items']):
-    track = item['track']
-    print(idx, track['artists'][0]['name'], " – ", track['name'])
+try:
+    results = sp.playlist("41TSE7Yh4ZYy0xueqVg8cx")
+    
+    if not results['items']:
+        print("Nothing is here")
+    else:
+        print(f"There are {len(results['items'])} saved tracks:\n")
+            
+except Exception as e:
+    print(e)
