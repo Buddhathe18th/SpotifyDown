@@ -11,14 +11,21 @@ scope = "user-library-read"
 auth_manager = SpotifyOAuth(scope=scope, show_dialog=True, open_browser=False)
 sp = spotipy.Spotify(auth_manager=auth_manager)
 
-print("CLICK:")
-print(f"\n{auth_manager.get_authorize_url()}")
-redirect_response = input("\nPaste FULL REDIRECT LINK: ").strip()
+try:
+    auth_manager.get_cached_token()
+    print("COOKED WOOOO")
+except:
+    print("I'm cooked")
+    
+    print("CLICK:")
+    print(f"\n{auth_manager.get_authorize_url()}")
+    redirect_response = input("\nPaste FULL REDIRECT LINK: ").strip()
+
 
 
 try:
     print("test")
-    code = auth_manager.parse_response_code(redirect_response)
+    # code = auth_manager.parse_response_code(redirect_response)
     # token = auth_manager.get_access_token(code)
     
     sp = spotipy.Spotify(auth_manager=auth_manager)
