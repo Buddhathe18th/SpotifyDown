@@ -1,14 +1,21 @@
 import yt_dlp
+import os
 
-URLS = ['https://www.youtube.com/watch?v=mTKH0YBWXBQ']
+FFMPEG_DIR = '.\\ffmpeg-8.0-essentials_build\\bin\\ffmpeg.exe'
+
+URLS = ['https://www.youtube.com/watch?v=lMwPSa9XJKw']
 
 ydl_opts = {
-    'format': 'm4a/bestaudio/best',
-    # ℹ️ See help(yt_dlp.postprocessor) for a list of available Postprocessors and their arguments
-    'postprocessors': [{  # Extract audio using ffmpeg
-        'key': 'FFmpegExtractAudio',
-        'preferredcodec': 'm4a',
-    }]
+    "format": "bestaudio/best",
+    "outtmpl": ".\\Songs\\%(title)s.%(ext)s",  # save as video title
+    "ffmpeg_location": FFMPEG_DIR,   # use repo-local ffmpeg
+    "postprocessors": [
+        {  # Extract audio using ffmpeg
+            "key": "FFmpegExtractAudio",
+            "preferredcodec": "mp3",
+            "preferredquality": "192",
+        }
+    ],
 }
 
 with yt_dlp.YoutubeDL(ydl_opts) as ydl:
