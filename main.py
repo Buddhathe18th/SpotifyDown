@@ -23,46 +23,22 @@ except:
 
 
 
-try:
-    print("test")
-    # code = auth_manager.parse_response_code(redirect_response)
-    # token = auth_manager.get_access_token(code)
-    
-    sp = spotipy.Spotify(auth_manager=auth_manager)
-    results = sp.playlist("41TSE7Yh4ZYy0xueqVg8cx")
-    
-    if not results['items']:
-        print("Nothing is here")
-    else:
-        print(f"There are {len(results['items'])} saved tracks:\n")            
-except Exception as e:
-    print("broken")
 
-
-
-
-# def getArtists(artists):
-#     artist_list=[]
-#     for artist in artists:
-#         artist_list.append(artist["name"])
-#     return artist_list
+def getArtists(artists):
+    artist_list=[]
+    for artist in artists:
+        artist_list.append(artist["name"])
+    return artist_list
 
 
 try:
     results = sp.playlist_items("1WH6WVBwPBz35ZbWsgCpgr")
-    good={}
-    # for song_details in results["items"]:
-    #     song_raw=song_details["track"]
-    #     song={"images":[],"artists":getArtists(song_raw["artists"]),"duration_ms":[],"name":""}
+    good=[]
+    for song_details in results["items"]:
+        song_raw=song_details["track"]
+        song={"image_url":song_raw["album"]["images"][0]["url"],"album":song_raw["album"]["name"],"artists":getArtists(song_raw["artists"]),"duration_ms":song_raw["duration_ms"],"name":song_raw["name"]}
+        good.append(song)
     
-    
-    k=results["items"][0]["track"]
-    # print(getArtists(results["items"][13]["track"]["artists"]))
-    print(k)
-    print(type(k))
-    print(k.keys())
-    good={"images":[],"artists":[],"duration_ms":[],"name":""}
-
             
 except Exception as e:
     print("I'm shit at programming what did I do")
