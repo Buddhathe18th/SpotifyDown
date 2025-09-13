@@ -13,7 +13,7 @@ post_spotify=time.perf_counter()
 
 links=[]
 for song in playlist:
-    links.append(find_best_song(song["name"],song["artists"],song["duration"]))
+    links.append([song,find_best_song(song["name"],song["artists"],song["duration"])])
 
 post_search=time.perf_counter()
 
@@ -26,6 +26,6 @@ print(f"Time elapsed for Spotify info: {post_spotify-post_auth:.6f} seconds")
 print(f"Time elapsed for searching: {post_search-post_spotify:.6f} seconds")
 print(f"Time elapsed for downloading: {post_download-post_search:.6f} seconds")
 
-print(f"\n\nAverage time per song: {post_download-pre_auth:.6f} seconds")
+print(f"\n\nAverage time per song: {(post_download-pre_auth)/len(links):.6f} seconds")
 
 
