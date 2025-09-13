@@ -3,10 +3,7 @@ import os
 
 FFMPEG_DIR = '.\\ffmpeg-8.0-essentials_build\\bin\\ffmpeg.exe'
 
-def download(songs): # As a list of tuples, of the song then the url
-    urls=[]
-    for song in songs:
-        urls.append(song[1])
+def download(song): # song dictionary
     ydl_opts = {
         "format": "bestaudio/best",
         "outtmpl": ".\\Songs\\%(title)s.%(ext)s",  # save as video title
@@ -21,4 +18,4 @@ def download(songs): # As a list of tuples, of the song then the url
     }
 
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-        error_code = ydl.download(urls)
+        error_code = ydl.download([song["url"]])
