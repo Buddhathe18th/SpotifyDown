@@ -1,6 +1,7 @@
 from spotipyMain import *
 from youtube import *
 from search import *
+from metadata import *
 import time
 
 pre_auth = time.perf_counter()
@@ -17,13 +18,17 @@ for song in playlist:
 
 post_download=time.perf_counter()
 
+print(playlist)
 for song in playlist:
-    print(song)
+    tag_music(song)
+
+post_tag=time.perf_counter()
 
 print(f"\n\n\nTime elapsed for authentication: {post_auth-pre_auth:.6f} seconds")
 print(f"Time elapsed for Spotify info: {post_spotify-post_auth:.6f} seconds")
 print(f"Time elapsed for downloading: {post_download-post_spotify:.6f} seconds")
+print(f"Time elapsed for tagging: {post_tag-post_download:.6f} seconds")
 
-print(f"\n\nAverage time per song: {(post_download-pre_auth)/len(playlist):.6f} seconds")
+print(f"\n\nAverage time per song: {(post_tag-pre_auth)/len(playlist):.6f} seconds")
 
 

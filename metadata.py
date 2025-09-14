@@ -1,8 +1,14 @@
 import music_tag
 
-song=music_tag.load_file("Songs\Ed Sheeran - Perfect [Official Lyric Video].mp3")
-song.remove_tag('title')
-song.append_tag('title', 'Perfect')
-song.save()
 
-print(song)
+def tag_music(song):
+    file=music_tag.load_file("Songs\\"+str(song["name"])+".mp3")
+
+    file["title"]=song["name"]
+
+    for artist in song["artists"]:
+        file["artist"]=str(file["artist"])+artist+";"
+    file["artist"]=str(file["artist"])[:-1]
+    file["album"]=song["album"]
+
+    file.save()
