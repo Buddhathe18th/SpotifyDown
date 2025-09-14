@@ -4,7 +4,7 @@ FFMPEG_DIR = '.\\ffmpeg-8.0-essentials_build\\bin\\ffmpeg.exe'
 
 def find_best_song(title, artists, length):
     option_length=0
-    while abs(option_length-length)>2:
+    while abs(option_length-length)>15:
         query = f"ytsearch:{title}"
         for artist in artists:
             query+=" "+artist
