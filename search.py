@@ -17,10 +17,3 @@ def find_best_song(title, artists, length):
             option_length=entry["duration"]
     return info["entries"][0]["webpage_url"]
 
-# song_title = "Baby"
-# song_artists = ["Justin Beiber","Ludacris"]
-# song_length = 214  # seconds
-
-# print(find_best_song(song_title,song_artists,song_length))
-
-

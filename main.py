@@ -18,7 +18,6 @@ for song in playlist:
 
 post_download=time.perf_counter()
 
-print(playlist)
 for song in playlist:
     tag_music(song)
 
