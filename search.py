@@ -10,7 +10,7 @@ def find_best_song(title, artists, length):
             query+=" "+artist
         query+=" audio"
 
-        with yt_dlp.YoutubeDL({"ffmpeg_location": FFMPEG_DIR}) as ydl:
+        with yt_dlp.YoutubeDL({'quiet': True,"ffmpeg_location": FFMPEG_DIR}) as ydl:
             info = ydl.extract_info(query, download=False)
 
         for entry in info["entries"]:
