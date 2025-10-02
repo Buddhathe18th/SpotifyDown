@@ -1,5 +1,7 @@
 # Ignore environment files
 .env
+.envNew
 .cache
+skipped.txt
 __pycache__
 Songs

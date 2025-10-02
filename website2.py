@@ -1,7 +1,6 @@
 from flask import Flask, Response, render_template_string, request
 import time
 from main import *
-import threading
 
 app = Flask(__name__)
 
@@ -26,13 +25,18 @@ progress_messages = []
 
 @app.route("/start", methods=["POST"])
 def start():
+    global progress_messages
     query = request.form["query"]
-    threading.Thread(target=main, args=(query,)).start()
+
+
+    import threading
+    threading.Thread(target=test, args=(query,)).start()
     return "Started! Open console above to watch progress."
 
 @app.route("/progress")
 def progress():
     def event_stream():
+        global progress_messages
         last_index = 0
         while True:
             if len(progress_messages) > last_index:

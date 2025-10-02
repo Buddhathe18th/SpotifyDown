@@ -32,7 +32,7 @@ def getArtists(artists):
 def store_playlist(id):
     global sp
     try:
-        results = sp.playlist_items(id)
+        results = sp.playlist_items(id,limit=100)
         good=[]
         for song_details in results["items"]:
             song_raw=song_details["track"]

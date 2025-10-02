@@ -5,7 +5,7 @@ FFMPEG_DIR = '.\\ffmpeg-8.0-essentials_build\\bin\\ffmpeg.exe'
 
 def download(song): # song dictionary
     ydl_opts = {
-        'quiet': True,
+        # 'quiet': True,
         "format": "bestaudio/best",
         "outtmpl": ".\\Songs\\"+str(song["name"])+".%(ext)s",  # save as video title
         "ffmpeg_location": FFMPEG_DIR,   # use repo-local ffmpeg
