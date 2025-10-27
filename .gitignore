@@ -3,5 +3,6 @@
 .envNew
 .cache
 skipped.txt
+yt_dlp_log.txt
 __pycache__
 Songs
