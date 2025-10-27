@@ -1,4 +1,5 @@
 import yt_dlp
+import logger
 
 FFMPEG_DIR = '.\\ffmpeg-8.0-essentials_build\\bin\\ffmpeg.exe'
 
@@ -14,7 +15,8 @@ def find_best_song(title, artists, length):
     with yt_dlp.YoutubeDL({
         # 'quiet': True,
         "ffmpeg_location": FFMPEG_DIR
-        
+        , "logger": logger.YTDLPPyLogger()
+        ,"verbose": True
         ,'flat_playlist': True
         ,"skip_download": True
         }) as ydl:

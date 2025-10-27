@@ -33,10 +33,11 @@ def store_playlist(id):
     global sp
     try:
         results = sp.playlist_items(id,limit=100)
+        playlist_title=sp.user_playlist(user=None, playlist_id=id, fields="name")["name"]
         good=[]
         for song_details in results["items"]:
             song_raw=song_details["track"]
-            song={"image_url":song_raw["album"]["images"][0]["url"],"album":song_raw["album"]["name"],"artists":getArtists(song_raw["artists"]),"duration":song_raw["duration_ms"]//1000,"name":song_raw["name"],"url":""}
+            song={"image_url":song_raw["album"]["images"][0]["url"],"album":song_raw["album"]["name"],"artists":getArtists(song_raw["artists"]),"duration":song_raw["duration_ms"]//1000,"name":song_raw["name"].replace("//","////"),"url":"","playlist":playlist_title}
             good.append(song)
         return good
         

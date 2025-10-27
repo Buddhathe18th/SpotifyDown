@@ -4,7 +4,7 @@ import os
 
 
 def tag_music(song):
-    file=music_tag.load_file("Songs\\"+str(song["name"])+".mp3")
+    file=music_tag.load_file("Songs\\"+song["playlist"]+"\\"+str(song["name"])+".mp3")
 
     file["title"]=song["name"]
 
