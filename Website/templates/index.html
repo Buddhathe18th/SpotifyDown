@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Spotify Downloader</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #121212;
+            color: white;
+            text-align: center;
+            margin-top: 100px;
+        }
+        input {
+            padding: 10px;
+            width: 400px;
+            border-radius: 6px;
+            border: none;
+        }
+        button {
+            padding: 10px 20px;
+            border: none;
+            background: #1DB954;
+            color: white;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        button:hover { background: #1ed760; }
+    </style>
+</head>
+<body>
+    <h1>Spotify Playlist Downloader</h1>
+    <form id="downloadForm">
+        <input type="text" name="playlist_url" placeholder="Enter Spotify playlist URL..." required>
+        <button type="submit">Download</button>
+    </form>
+    <p id="message"></p>
+
+    <script>
+        document.getElementById("downloadForm").addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const response = await fetch("/download", {
+                method: "POST",
+                body: formData
+            });
+            const result = await response.json();
+            document.getElementById("message").textContent = result.message;
+        });
+    </script>
+</body>
+</html>
