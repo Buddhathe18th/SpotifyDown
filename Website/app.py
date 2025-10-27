@@ -7,6 +7,7 @@ import threading
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'Backend'))
 
 from main import main as download_playlist
+from spotipyMain import verify
 
 app = Flask(__name__)
 
@@ -18,9 +19,9 @@ def index():
 def download():
     playlist_url = request.form.get('playlist_url')
 
-    if "playlist/" in playlist_url:
-        playlist_id = playlist_url.split("playlist/")[1].split("?")[0]
-    else:
+    playlist_id = playlist_url.split("playlist/")[1].split("?")[0]
+    
+    if not verify(playlist_id):
         return jsonify({"status": "error", "message": "Invalid Spotify playlist URL"}), 400
 
     threading.Thread(target=download_playlist, args=(playlist_id,)).start()

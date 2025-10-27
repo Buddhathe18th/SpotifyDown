@@ -3,16 +3,14 @@ import os
 from dotenv import load_dotenv
 from spotipy.oauth2 import SpotifyOAuth
 
-sp=0
+load_dotenv()  # loads variables from .env in the repo root
+
+scope = "user-library-read"
+
+auth_manager = SpotifyOAuth(scope=scope, show_dialog=True, open_browser=False)
+sp = spotipy.Spotify(auth_manager=auth_manager)
 def authentication():
     global sp
-    load_dotenv()  # loads variables from .env in the repo root
-
-    scope = "user-library-read"
-
-    auth_manager = SpotifyOAuth(scope=scope, show_dialog=True, open_browser=False)
-    sp = spotipy.Spotify(auth_manager=auth_manager)
-
     try:
         auth_manager.get_cached_token()
         print("COOKED WOOOO")
@@ -22,6 +20,13 @@ def authentication():
         print("CLICK:")
         print(f"\n{auth_manager.get_authorize_url()}")
         redirect_response = input("\nPaste FULL REDIRECT LINK: ").strip()
+
+def verify(id):
+    try:
+        sp.playlist(id)
+        return True
+    except spotipy.exceptions.SpotifyException:
+        return False
 
 def getArtists(artists):
     artist_list=[]
