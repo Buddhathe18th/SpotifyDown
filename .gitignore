@@ -1,6 +1,6 @@
-# Ignore environment files
 .env
 .envNew
+.venv
 .cache
 skipped.txt
 yt_dlp_log.txt

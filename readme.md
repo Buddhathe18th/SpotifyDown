@@ -10,9 +10,14 @@ Make sure you have:
 - Python 3.8 or newer  
 - `pip` (Python package manager)  
 
+#### Important
+
+Make sure you have the Spotipy API keys in `.env`, including `SPOTIPY_CLIENT_ID, SPOTIPY_CLIENT_SECRET, SPOTIPY_REDIRECT_URI`
+
 Try and run 
 ````
-venv\Scripts\activate
+python -m venv .venv
+.venv\Scripts\activate
 pip install -r requirements.txt
 python app.py
 ````
