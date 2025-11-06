@@ -5,7 +5,7 @@ from metadata import *
 # from website2 import progress_messages
 import time
 
-def main(id):
+def main(id, progress_callback=None):
     # progress_messages.append("AAAAAAAAAAA")
     pre_auth = time.perf_counter()
     authentication()
@@ -15,6 +15,10 @@ def main(id):
 
     post_spotify=time.perf_counter()
 
+    if progress_callback:
+        progress_callback(None, 0, len(playlist))
+
+    
     for song in playlist:
         print(song["name"])
         # progress_messages.append("test")
@@ -26,6 +30,8 @@ def main(id):
         else:
             print("Found best song for:"+str(song["name"]))
             download(song)
+            if progress_callback:
+                progress_callback(song, playlist.index(song), len(playlist))
             print("Finish downloading:"+str(song["name"]))
 
     post_download=time.perf_counter()

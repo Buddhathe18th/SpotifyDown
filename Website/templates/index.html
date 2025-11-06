@@ -1,52 +1,132 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Spotify Downloader</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #121212;
-            color: white;
-            text-align: center;
-            margin-top: 100px;
-        }
-        input {
-            padding: 10px;
-            width: 400px;
-            border-radius: 6px;
-            border: none;
-        }
-        button {
-            padding: 10px 20px;
-            border: none;
-            background: #1DB954;
-            color: white;
-            border-radius: 6px;
-            cursor: pointer;
-        }
-        button:hover { background: #1ed760; }
-    </style>
-</head>
-<body>
-    <h1>Spotify Playlist Downloader</h1>
-    <form id="downloadForm">
-        <input type="text" name="playlist_url" placeholder="Enter Spotify playlist URL..." required>
-        <button type="submit">Download</button>
-    </form>
-    <p id="message"></p>
+  <meta charset="UTF-8">
+  <title>Spotify Playlist Downloader</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #121212;
+      text-align: center;
+      color: #333;
+      margin: 40px;
+    }
 
-    <script>
-        document.getElementById("downloadForm").addEventListener("submit", async (e) => {
-            e.preventDefault();
-            const formData = new FormData(e.target);
-            const response = await fetch("/download", {
-                method: "POST",
-                body: formData
-            });
-            const result = await response.json();
-            document.getElementById("message").textContent = result.message;
-        });
-    </script>
+    h1 {
+      font-size: 1.8em;
+      margin-bottom: 1em;
+      color: #1DB954; /* Spotify green */
+    }
+
+    form {
+      margin-bottom: 30px;
+    }
+
+    input[type="text"] {
+      width: 400px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 14px;
+    }
+
+    button {
+      padding: 10px 18px;
+      background-color: #1DB954;
+      border: none;
+      border-radius: 8px;
+      color: white;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 14px;
+      margin-left: 8px;
+      transition: background-color 0.2s;
+    }
+
+    button:hover {
+      background-color: #17a74a;
+    }
+
+    #currentSong {
+      font-weight: 600;
+      margin-top: 20px;
+      font-size: 16px;
+    }
+
+    #progressBar {
+      width: 100%;
+      max-width: 500px;
+      height: 25px;
+      background: #eee;
+      border-radius: 10px;
+      overflow: hidden;
+      margin-top: 10px;
+      margin: 0 auto;
+    }
+
+    #progressFill {
+      height: 100%;
+      background: #1DB954;
+      width: 0%;
+      transition: width 0.3s;
+    }
+
+    #percent {
+      font-weight: bold;
+      margin-top: 8px;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>🎧 Spotify Playlist Downloader</h1>
+
+  <form id="downloadForm">
+    <input type="text" name="playlist_url" placeholder="Enter Spotify playlist URL" required>
+    <button type="submit">Download</button>
+  </form>
+  <p id="message"></p>
+
+  <div id="currentSong">Waiting...</div>
+
+  <div id="progressBar">
+    <div id="progressFill"></div>
+  </div>
+  <p id="percent">0%</p>
+
+  <script>
+    const form = document.getElementById('downloadForm');
+    const songElem = document.getElementById('currentSong');
+    const progressFill = document.getElementById('progressFill');
+    const percentElem = document.getElementById('percent');
+
+    form.onsubmit = async (e) => {
+      e.preventDefault();
+      const formData = new FormData(form);
+
+      // Start backend download
+      const response = await fetch('/download', { method: 'POST', body: formData });
+      const result = await response.json();
+      document.getElementById("message").textContent = result.message;
+      listenForProgress();
+    };
+
+    function listenForProgress() {
+      const eventSource = new EventSource('/progress');
+      eventSource.onmessage = function(event) {
+        const msg = JSON.parse(event.data.replace(/'/g, '"'));
+        if (msg.done) {
+          songElem.textContent = "✅ Download complete!";
+          percentElem.textContent = "100%";
+          progressFill.style.width = "100%";
+          eventSource.close();
+        } else {
+          songElem.textContent = `Downloading: ${msg.song}`;
+          percentElem.textContent = `${msg.progress}%`;
+          progressFill.style.width = `${msg.progress}%`;
+        }
+      };
+    }
+  </script>
 </body>
 </html>
