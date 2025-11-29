@@ -34,6 +34,10 @@ def getArtists(artists):
         artist_list.append(artist["name"])
     return artist_list
 
+def sanitize(name):
+    import re
+    return re.sub(r'[<>:"/\\|?*]', '_', name)
+
 def store_playlist(id):
     global sp
     try:
@@ -42,7 +46,7 @@ def store_playlist(id):
         good=[]
         for song_details in results["items"]:
             song_raw=song_details["track"]
-            song={"image_url":song_raw["album"]["images"][0]["url"],"album":song_raw["album"]["name"],"artists":getArtists(song_raw["artists"]),"duration":song_raw["duration_ms"]//1000,"name":song_raw["name"].replace("//","////"),"url":"","playlist":playlist_title}
+            song={"image_url":song_raw["album"]["images"][0]["url"],"album":song_raw["album"]["name"],"artists":getArtists(song_raw["artists"]),"duration":song_raw["duration_ms"]//1000,"name":song_raw["name"],"url":"","playlist":playlist_title}
             good.append(song)
         return good
         

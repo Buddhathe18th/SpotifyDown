@@ -2,9 +2,11 @@ import music_tag
 import requests
 import os
 
+from spotipyMain import sanitize
+
 
 def tag_music(song):
-    file=music_tag.load_file("Songs\\"+song["playlist"]+"\\"+str(song["name"])+".mp3")
+    file=music_tag.load_file("Songs\\"+song["playlist"]+"\\"+str(sanitize(song["name"]))+" - "+str(song["artists"])+".mp3")
 
     file["title"]=song["name"]
 

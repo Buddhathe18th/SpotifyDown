@@ -1,6 +1,8 @@
 import yt_dlp
 import os
+from spotipyMain import sanitize
 import logger
+
 
 FFMPEG_DIR = '.\\ffmpeg-8.0-essentials_build\\bin\\ffmpeg.exe'
 
@@ -8,7 +10,7 @@ def download(song): # song dictionary
     ydl_opts = {
         # 'quiet': True,
         "format": "bestaudio/best",
-        "outtmpl": ".\\Songs\\"+song["playlist"]+"\\"+str(song["name"])+".%(ext)s",  # save as video title
+        "outtmpl": ".\\Songs\\"+song["playlist"]+"\\"+str(sanitize(song["name"]))+" - "+str(song["artists"])+".%(ext)s",  # save as video title
         "ffmpeg_location": FFMPEG_DIR,   # use repo-local ffmpeg
         "logger": logger.YTDLPPyLogger()
         ,"verbose": True,
