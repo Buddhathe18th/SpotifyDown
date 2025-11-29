@@ -3,12 +3,13 @@ import sys
 import os
 import threading
 import queue
+from Backend.spotipyMain import sp
 
 # Add the functionality folder to the import path
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'Backend'))
 
-from main import main as download_playlist
-from spotipyMain import verify
+from Backend.main import main as download_playlist
+from Backend.spotipyMain import verify
 
 progress_queue = queue.Queue()
 
@@ -41,7 +42,7 @@ def download():
     
     threading.Thread(target=run_download, daemon=True).start()
 
-    return jsonify({"status": "success", "message": f"Started downloading playlist {playlist_id}"})
+    return jsonify({"status": "success", "message": f"Started downloading playlist {sp.user_playlist(user=None, playlist_id=playlist_id, fields='name')['name']}"})
 
 @app.route('/progress')
 def progress_stream():
