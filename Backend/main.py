@@ -1,7 +1,7 @@
-from spotipyMain import *
-from youtube import *
-from search import *
-from metadata import *
+from Backend.spotipyMain import *
+from Backend.youtube import *
+from Backend.search import *
+from Backend.metadata import *
 # from website2 import progress_messages
 import time
 

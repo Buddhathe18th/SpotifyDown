@@ -1,5 +1,5 @@
 import yt_dlp
-import logger
+import Backend.logger as logger
 
 FFMPEG_DIR = '.\\ffmpeg-8.0-essentials_build\\bin\\ffmpeg.exe'
 

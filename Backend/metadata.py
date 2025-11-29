@@ -2,7 +2,7 @@ import music_tag
 import requests
 import os
 
-from spotipyMain import sanitize
+from Backend.spotipyMain import sanitize
 
 
 def tag_music(song):

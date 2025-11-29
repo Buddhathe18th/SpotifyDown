@@ -1,7 +1,7 @@
 import yt_dlp
 import os
-from spotipyMain import sanitize
-import logger
+from Backend.spotipyMain import sanitize
+import Backend.logger as logger
 
 
 FFMPEG_DIR = '.\\ffmpeg-8.0-essentials_build\\bin\\ffmpeg.exe'
