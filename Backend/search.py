@@ -3,14 +3,11 @@ import Backend.logger as logger
 
 FFMPEG_DIR = '.\\ffmpeg-8.0-essentials_build\\bin\\ffmpeg.exe'
 
-def find_best_song(title, artists, length):
+def find_best_song(isrc, title):
     option_length=0
     option_title=""
     
-    query = f"ytsearch5:{title}"
-    for artist in artists:
-        query+=" "+artist
-    query+=" Official Lyric Video"
+    query = f"ytsearch:{isrc}]"
 
     with yt_dlp.YoutubeDL({
         # 'quiet': True,
@@ -26,8 +23,9 @@ def find_best_song(title, artists, length):
         
         option_title=entry["title"]
         option_length=entry["duration"]
-        if "Official Video" not in option_title and "Official Music Video" not in option_title and abs(option_length-length)<=15:
+        if "Official Video" not in option_title and "Official Music Video" not in option_title:
             print("Found song for "+title)
+            print(info["entries"][0]["webpage_url"])
             return info["entries"][0]["webpage_url"]
         else:
             next

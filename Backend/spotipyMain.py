@@ -46,7 +46,7 @@ def store_playlist(id):
         good=[]
         for song_details in results["items"]:
             song_raw=song_details["track"]
-            song={"image_url":song_raw["album"]["images"][0]["url"],"album":song_raw["album"]["name"],"artists":getArtists(song_raw["artists"]),"duration":song_raw["duration_ms"]//1000,"name":song_raw["name"],"url":"","playlist":playlist_title}
+            song={"image_url":song_raw["album"]["images"][0]["url"],"album":song_raw["album"]["name"],"artists":getArtists(song_raw["artists"]),"isrc":song_raw["external_ids"]["isrc"],"name":song_raw["name"],"url":"","playlist":playlist_title}
             good.append(song)
         return good
         

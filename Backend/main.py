@@ -22,7 +22,7 @@ def main(id, progress_callback=None):
     for song in playlist:
         print(song["name"])
         # progress_messages.append("test")
-        song["url"]=find_best_song(song["name"],song["artists"],song["duration"])
+        song["url"]=find_best_song(song["isrc"],song["name"])
         
         if song["url"]==None:
             with open("skipped.txt", "a", encoding="utf-8") as f:
