@@ -1,16 +1,9 @@
-# from flask import Flask
+from flask import Flask
 
-# def create_app():
-#     app = Flask(__name__, 
-#             template_folder=os.path.join(basedir, 'templates'),
-#             static_folder=os.path.join(basedir, 'static'))
-#     # app.config['SECRET_KEY'] = 'your-secret-key'
+def create_app():
+    app = Flask(__name__)
     
-#     # Register blueprints
-#     from .views import views
-#     from .auth import auth
+    from .routes import register_routes
+    register_routes(app)
     
-#     app.register_blueprint(views, url_prefix='/')
-#     app.register_blueprint(auth, url_prefix='/')
-    
-#     return app
+    return app
