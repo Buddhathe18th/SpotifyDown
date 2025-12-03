@@ -6,14 +6,16 @@ import queue
 from Backend.spotipyMain import sp
 
 # Add the functionality folder to the import path
-sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'Backend'))
+# sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'Backend'))
 
 from Backend.main import main as download_playlist
 from Backend.spotipyMain import verify
 
 progress_queue = queue.Queue()
 
-app = Flask(__name__)
+app = Flask(__name__, 
+            template_folder='Website/templates',
+            static_folder='Website/static')
 
 @app.route('/')
 def index():

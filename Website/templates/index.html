@@ -96,6 +96,7 @@
 
   <script>
     const form = document.getElementById('downloadForm');
+    const submitButton = form.querySelector('button[type="submit"]');
     const songElem = document.getElementById('currentSong');
     const progressFill = document.getElementById('progressFill');
     const percentElem = document.getElementById('percent');
@@ -104,11 +105,27 @@
       e.preventDefault();
       const formData = new FormData(form);
 
-      // Start backend download
-      const response = await fetch('/download', { method: 'POST', body: formData });
-      const result = await response.json();
-      document.getElementById("message").textContent = result.message;
-      listenForProgress();
+      // Disable button immediately
+      submitButton.disabled = true;
+      submitButton.textContent = 'Downloading...';
+      submitButton.style.backgroundColor = '#999';
+      submitButton.style.cursor = 'not-allowed';
+
+      try {
+        // Start backend download
+        const response = await fetch('/download', { method: 'POST', body: formData });
+        const result = await response.json();
+        document.getElementById("message").textContent = result.message;
+        listenForProgress();  
+      } catch (error) {
+        // Re-enable button on error
+        submitButton.disabled = false;
+        submitButton.textContent = 'Download';
+        submitButton.style.backgroundColor = '#1DB954';
+        submitButton.style.cursor = 'pointer';
+        document.getElementById("message").textContent = "Error: " + error.message;
+      }
+      
     };
 
     function listenForProgress() {
@@ -120,11 +137,25 @@
           percentElem.textContent = "100%";
           progressFill.style.width = "100%";
           eventSource.close();
+
+          // Re-enable button when complete
+          submitButton.disabled = false;
+          submitButton.textContent = 'Download';
+          submitButton.style.backgroundColor = '#1DB954';
+          submitButton.style.cursor = 'pointer';
         } else {
           songElem.textContent = `Downloading: ${msg.song}`;
           percentElem.textContent = `${msg.progress}%`;
           progressFill.style.width = `${msg.progress}%`;
         }
+        // Handle connection errors
+        eventSource.onerror = function() {
+          eventSource.close();
+          submitButton.disabled = false;
+          submitButton.textContent = 'Download';
+          submitButton.style.backgroundColor = '#1DB954';
+          submitButton.style.cursor = 'pointer';
+        };
       };
     }
   </script>
