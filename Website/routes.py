@@ -24,9 +24,9 @@ def register_routes(app: Flask):
 
         playlist_id = "abc"
         try:
-            playlist_id=playlist_url.split("playlist/")[1].split("?")[0]
-        except:
-            pass
+            playlist_id = playlist_url.split("playlist/")[1].split("?")[0]
+        except (IndexError, AttributeError) as e:
+            return jsonify({"status": "error", "message": "Invalid playlist URL format"}), 400
         
         if not verify(playlist_id):
             return jsonify({"status": "error", "message": "Invalid Spotify playlist URL"}), 400
