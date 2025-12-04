@@ -87,7 +87,7 @@
   </form>
   <p id="message"></p>
 
-  <div id="currentSong">Waiting...</div>
+  <div id="currentSong"></div>
 
   <div id="progressBar">
     <div id="progressFill"></div>
@@ -100,24 +100,48 @@
     const songElem = document.getElementById('currentSong');
     const progressFill = document.getElementById('progressFill');
     const percentElem = document.getElementById('percent');
+    
+    let controller = null; // Store the AbortController
+    let downloading = false;
 
     form.onsubmit = async (e) => {
       e.preventDefault();
+      console.log(e);
+
+      if (downloading) {
+        // Cancel download
+
+        if (controller) {
+          controller.abort(); // This cancels the ongoing fetch
+        }
+        fetch('/cancel', { method: 'POST' });
+        submitButton.textContent = 'Download';
+        submitButton.style.backgroundColor = '#1DB954';
+        downloading = false;
+        return;
+      }
+
+      controller = new AbortController();
       const formData = new FormData(form);
 
-      // Disable button immediately
-      submitButton.disabled = true;
-      submitButton.textContent = 'Downloading...';
-      submitButton.style.backgroundColor = '#999';
-      submitButton.style.cursor = 'not-allowed';
+      submitButton.textContent = 'Cancel Download';
+      submitButton.style.backgroundColor = '#ee0000';
+      downloading = true;
 
       try {
         // Start backend download
-        const response = await fetch('/download', { method: 'POST', body: formData });
+        const response = await fetch('/download', { method: 'POST', body: formData, signal: controller.signal});
         const result = await response.json();
         document.getElementById("message").textContent = result.message;
         listenForProgress();  
       } catch (error) {
+
+        if (error.name === 'AbortError') {
+          console.log('Download cancelled');
+          document.getElementById("message").textContent = "Download cancelled";
+        } else {
+          document.getElementById("message").textContent = "Error: " + error.message;
+        }
         // Re-enable button on error
         submitButton.disabled = false;
         submitButton.textContent = 'Download';
@@ -138,11 +162,8 @@
           progressFill.style.width = "100%";
           eventSource.close();
 
-          // Re-enable button when complete
-          submitButton.disabled = false;
           submitButton.textContent = 'Download';
           submitButton.style.backgroundColor = '#1DB954';
-          submitButton.style.cursor = 'pointer';
         } else {
           songElem.textContent = `Downloading: ${msg.song}`;
           percentElem.textContent = `${msg.progress}%`;

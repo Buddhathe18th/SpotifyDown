@@ -12,6 +12,7 @@ from Backend.main import main as download_playlist
 from Backend.spotipyMain import verify
 
 progress_queue = queue.Queue()
+download_tasks = {}
 
 def register_routes(app: Flask):
     @app.route('/')
@@ -21,7 +22,6 @@ def register_routes(app: Flask):
     @app.route('/download', methods=['POST'])
     def download():
         playlist_url = request.form.get('playlist_url')
-
         playlist_id = "abc"
         try:
             playlist_id=playlist_url.split("playlist/")[1].split("?")[0]
@@ -31,15 +31,26 @@ def register_routes(app: Flask):
         if not verify(playlist_id):
             return jsonify({"status": "error", "message": "Invalid Spotify playlist URL"}), 400
 
+        stop_flag = {'should_stop': False}
+
         def run_download():
             def progress_callback(song, current, total):
+                if stop_flag['should_stop']:
+                    progress_queue.put({"cancelled": True})
+                    return False  # Signal to stop
+                
                 progress = int((current / total) * 100)
                 msg = {"song": song, "current": current, "total": total, "progress": progress}
                 progress_queue.put(msg)
+                return True  # Continue downloading
             download_playlist(playlist_url, progress_callback)
             progress_queue.put({"done": True})
+            if playlist_id in download_tasks:
+                del download_tasks[playlist_id]
         
-        threading.Thread(target=run_download, daemon=True).start()
+        thread=threading.Thread(target=run_download, daemon=True).start()
+        download_tasks[playlist_id] = {'thread': thread, 'stop_flag': stop_flag}
+        thread.start()
 
         return jsonify({"status": "success", "message": f"Started downloading playlist {sp.user_playlist(user=None, playlist_id=playlist_id, fields='name')['name']}"})
 
