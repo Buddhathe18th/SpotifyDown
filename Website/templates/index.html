@@ -132,7 +132,14 @@
       try {
         // Start backend download
         const response = await fetch('/download', { method: 'POST', body: formData, signal: controller.signal});
+        
         const result = await response.json();
+
+        const contentType = response.headers.get('content-type');
+        console.log(contentType);
+        console.log(result);
+
+
         document.getElementById("message").textContent = result.message;
         listenForProgress();  
       } catch (error) {

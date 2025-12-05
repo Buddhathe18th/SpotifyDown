@@ -48,7 +48,7 @@ def register_routes(app: Flask):
             if playlist_id in download_tasks:
                 del download_tasks[playlist_id]
         
-        thread=threading.Thread(target=run_download, daemon=True).start()
+        thread=threading.Thread(target=run_download, daemon=True)
         download_tasks[playlist_id] = {'thread': thread, 'stop_flag': stop_flag}
         thread.start()
 
