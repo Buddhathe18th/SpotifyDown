@@ -6,3 +6,8 @@ skipped.txt
 yt_dlp_log.txt
 __pycache__
 Songs
+*.pyc
+*.pyo
+*.mp3
+*.mp4
+downloads/

@@ -3,3 +3,4 @@ spotipy==2.25.1
 dotenv==0.9.9
 yt-dlp==2025.10.22
 music-tag==0.4.3
+gunicorn==23.0.0
