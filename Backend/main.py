@@ -1,4 +1,4 @@
-from Backend.spotipyMain import *
+from Backend.spotipyMain import authentication, store_playlist
 from Backend.youtube import *
 from Backend.search import *
 from Backend.metadata import *

@@ -1,5 +1,6 @@
 import spotipy
 import os
+import sys
 from dotenv import load_dotenv
 from spotipy.oauth2 import SpotifyOAuth
 
@@ -8,22 +9,29 @@ load_dotenv()  # loads variables from .env in the repo root
 scope = "user-library-read"
 
 auth_manager = SpotifyOAuth(scope=scope, show_dialog=True, open_browser=False)
+
+try:
+    cache_token = os.environ.get('SPOTIFY_CACHED_TOKEN')
+    if cache_token:
+        with open('.cache', 'w') as f:
+            f.write(cache_token)
+        print("Cache file created from environment variable", flush=True)
+    auth_manager = SpotifyOAuth(scope=scope, show_dialog=True, open_browser=False,cache_path=".cache")
+except:
+    print("CLICK:")
+    print(f"\n{auth_manager.get_authorize_url()}")
+    redirect_response = input("\nPaste FULL REDIRECT LINK: ").strip()
+
 sp = spotipy.Spotify(auth_manager=auth_manager)
+
+
 def authentication():
-    global sp
-    try:
-        auth_manager.get_cached_token()
-        print("COOKED WOOOO")
-    except:
-        print("I'm cooked")
-        
-        print("CLICK:")
-        print(f"\n{auth_manager.get_authorize_url()}")
-        redirect_response = input("\nPaste FULL REDIRECT LINK: ").strip()
+    pass
 
 def verify(id):
     try:
-        sp.playlist(id)
+        print(id)
+        # sp.playlist(id)
         return True
     except spotipy.exceptions.SpotifyException:
         return False
