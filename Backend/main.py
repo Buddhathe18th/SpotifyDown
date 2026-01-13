@@ -42,10 +42,10 @@ def main(id, progress_callback=None):
 
     post_tag=time.perf_counter()
 
-    path = "./Songs"+str(playlist[0]["playlist"])
+    path = "./Songs/"+str(playlist[0]["playlist"])
 
     if id[:6]=="https:":
-        output_path="./Songs/spotify_"+str(id.split("playlist/")[1].split("?")[0])+".zip"
+        output_path="./Songs/"+str(id.split("playlist/")[1].split("?")[0])+".zip"
     else:
         output_path="./Songs/"+str(id)+".zip"
 

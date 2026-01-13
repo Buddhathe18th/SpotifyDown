@@ -65,26 +65,26 @@ def register_routes(app: Flask):
 
     @app.route('/get_zip/<zip_id>', methods=['GET'])
     def get_zip(zip_id):
-        zip_path = f'Songs/spotify_{zip_id}.zip'
+        zip_path = f'Songs/{zip_id}.zip'
     
-        # Debug: Print current working directory
-        print(f"Current working directory: {os.getcwd()}", flush=True)
+        # # Debug: Print current working directory
+        # print(f"Current working directory: {os.getcwd()}", flush=True)
         
-        # Debug: List all files in Songs directory
-        songs_dir = 'Songs'
-        if os.path.exists(songs_dir):
-            print(f"Files in {songs_dir}: {os.listdir(songs_dir)}", flush=True)
-        else:
-            print(f"{songs_dir} directory doesn't exist!", flush=True)
+        # # Debug: List all files in Songs directory
+        # songs_dir = 'Songs'
+        # if os.path.exists(songs_dir):
+        #     print(f"Files in {songs_dir}: {os.listdir(songs_dir)}", flush=True)
+        # else:
+        #     print(f"{songs_dir} directory doesn't exist!", flush=True)
         
-        # Check the exact path
-        print(f"Looking for: {zip_path}", flush=True)
-        print(f"File exists: {os.path.exists(zip_path)}", flush=True)
+        # # Check the exact path
+        # print(f"Looking for: {zip_path}", flush=True)
+        # print(f"File exists: {os.path.exists(zip_path)}", flush=True)
         
-        # Try absolute path for comparison
-        abs_path = os.path.abspath(zip_path)
-        print(f"Absolute path: {abs_path}", flush=True)
-        print(f"Absolute exists: {os.path.exists(abs_path)}", flush=True)
+        # # Try absolute path for comparison
+        # abs_path = os.path.abspath(zip_path)
+        # print(f"Absolute path: {abs_path}", flush=True)
+        # print(f"Absolute exists: {os.path.exists(abs_path)}", flush=True)
 
         if not os.path.exists(zip_path):
             return jsonify({"status": "error", "message": f"Zip file not found at {zip_path}"}), 404
