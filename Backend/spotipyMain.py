@@ -31,7 +31,7 @@ def authentication():
 def verify(id):
     try:
         print(id)
-        # sp.playlist(id)
+        sp.playlist(id)
         return True
     except spotipy.exceptions.SpotifyException:
         return False

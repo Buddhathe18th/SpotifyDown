@@ -23,6 +23,7 @@ def download(song): # song dictionary
         ],
     }
     try:
+        print("Downloading:"+str(song["name"]))
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             error_code = ydl.download([song["url"]])
     except:

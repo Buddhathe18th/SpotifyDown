@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>Spotify Playlist Downloader</title>
@@ -15,7 +16,8 @@
     h1 {
       font-size: 1.8em;
       margin-bottom: 1em;
-      color: #1DB954; /* Spotify green */
+      color: #1DB954;
+      /* Spotify green */
     }
 
     form {
@@ -101,7 +103,7 @@
     const songElem = document.getElementById('currentSong');
     const progressFill = document.getElementById('progressFill');
     const percentElem = document.getElementById('percent');
-    
+
     let controller = null; // Store the AbortController
     let downloading = false;
 
@@ -131,8 +133,8 @@
 
       try {
         // Start backend download
-        const response = await fetch('/download', { method: 'POST', body: formData, signal: controller.signal});
-        
+        const response = await fetch('/download', { method: 'POST', body: formData, signal: controller.signal });
+
         const result = await response.json();
 
         const contentType = response.headers.get('content-type');
@@ -141,7 +143,7 @@
 
 
         document.getElementById("message").textContent = result.message;
-        listenForProgress();  
+        listenForProgress();
       } catch (error) {
 
         if (error.name === 'AbortError') {
@@ -157,14 +159,15 @@
         submitButton.style.cursor = 'pointer';
         document.getElementById("message").textContent = "Error: " + error.message;
       }
-      
+
     };
 
     function listenForProgress() {
       const eventSource = new EventSource('/progress');
-      eventSource.onmessage = function(event) {
-        const msg = JSON.parse(event.data.replace(/'/g, '"'));
-        if (msg.done) {
+      eventSource.onmessage = function (event) {
+        const msg = JSON.parse(event.data);
+        console.log(msg);
+        if (msg.done || msg.done=="True") {
           songElem.textContent = "✅ Download complete!";
           percentElem.textContent = "100%";
           progressFill.style.width = "100%";
@@ -172,21 +175,27 @@
 
           submitButton.textContent = 'Download';
           submitButton.style.backgroundColor = '#1DB954';
+
+          if ((msg.zip_ready || msg.zip_ready=="True") && msg.zip_id) {
+            console.log("Redirecting to download zip...");
+            window.location.href = `/get_zip/${msg.zip_id}`;
+          }
         } else {
           songElem.textContent = `Downloading: ${msg.song}`;
           percentElem.textContent = `${msg.progress}%`;
           progressFill.style.width = `${msg.progress}%`;
         }
         // Handle connection errors
-        eventSource.onerror = function() {
-          eventSource.close();
-          submitButton.disabled = false;
-          submitButton.textContent = 'Download';
-          submitButton.style.backgroundColor = '#1DB954';
-          submitButton.style.cursor = 'pointer';
-        };
+      };
+      eventSource.onerror = function () {
+        eventSource.close();
+        submitButton.disabled = false;
+        submitButton.textContent = 'Download';
+        submitButton.style.backgroundColor = '#1DB954';
+        submitButton.style.cursor = 'pointer';
       };
     }
   </script>
 </body>
+
 </html>

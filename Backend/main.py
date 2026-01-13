@@ -1,7 +1,8 @@
-from Backend.spotipyMain import authentication, store_playlist
+from Backend.spotipyMain import authentication, store_playlist, verify
 from Backend.youtube import *
 from Backend.search import *
 from Backend.metadata import *
+from Backend.output import *
 # from website2 import progress_messages
 import time
 
@@ -40,6 +41,20 @@ def main(id, progress_callback=None):
         tag_music(song)
 
     post_tag=time.perf_counter()
+
+    path = "./Songs"+str(playlist[0]["playlist"])
+
+    if id[:6]=="https:":
+        output_path="./Songs/spotify_"+str(id.split("playlist/")[1].split("?")[0])+".zip"
+    else:
+        output_path="./Songs/"+str(id)+".zip"
+
+
+
+    
+
+    zip_directory(path, output_path)
+
     print(f"\n\n\nTime elapsed for authentication: {post_auth-pre_auth:.6f} seconds\nTime elapsed for Spotify info: {post_spotify-post_auth:.6f} seconds\nTime elapsed for downloading: {post_download-post_spotify:.6f} seconds\nTime elapsed for tagging: {post_tag-post_download:.6f} seconds\n\n\nAverage time per song: {(post_tag-pre_auth)/len(playlist):.6f} seconds")
 
 
