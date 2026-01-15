@@ -102,7 +102,7 @@ def register_routes(app: Flask):
             return response
         
         return send_file(
-            "..\\"+zip_path,
+            "../"+zip_path,
             as_attachment=True,
             download_name=f'{zip_id}.zip',
             mimetype='application/zip'

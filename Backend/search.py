@@ -1,7 +1,7 @@
 import yt_dlp
 import Backend.logger as logger
 
-FFMPEG_DIR = '.\\ffmpeg-8.0-essentials_build\\bin\\ffmpeg.exe'
+FFMPEG_DIR = './ffmpeg-8.0-essentials_build/bin/ffmpeg.exe'
 
 def find_best_song(isrc, title):
     option_length=0
