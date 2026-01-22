@@ -88,7 +88,8 @@ def register_routes(app: Flask):
 
         if not os.path.exists(zip_path):
             return jsonify({"status": "error", "message": f"Zip file not found at {zip_path}"}), 404
-        
+    
+
         @after_this_request
         def cleanup(response):
             try:

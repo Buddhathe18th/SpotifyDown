@@ -6,8 +6,15 @@ from Backend.spotipyMain import sanitize
 
 
 def tag_music(song):
-    file=music_tag.load_file("Songs/"+song["playlist"]+"/"+str(sanitize(song["name"]))+" - "+str(song["artists"])+".mp3")
+    try:
 
+        file=music_tag.load_file("Songs/"+song["playlist"]+"/"+str(sanitize(song["name"]))+" - "+str(song["artists"])+".mp3")
+    except Exception as e:
+        print("Tagging failed for:"+str(song["name"]))
+        print(e)
+        with open("skipped.txt", "a", encoding="utf-8") as f:
+                f.write(str(song)+"\n")
+        return
     file["title"]=song["name"]
 
     for artist in song["artists"]:

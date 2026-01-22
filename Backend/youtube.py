@@ -12,8 +12,9 @@ def download(song): # song dictionary
         "format": "bestaudio/best",
         "outtmpl": "./Songs/"+song["playlist"]+"/"+str(sanitize(song["name"]))+" - "+str(song["artists"])+".%(ext)s",  # save as video title
         "ffmpeg_location": FFMPEG_DIR,   # use repo-local ffmpeg
-        "logger": logger.YTDLPPyLogger()
-        ,"verbose": True,
+        "logger": logger.YTDLPPyLogger(),
+        "verbose": True,
+        'cookiefile': 'www.youtube.com_cookies.txt', 
         "postprocessors": [
             {  # Extract audio using ffmpeg
                 "key": "FFmpegExtractAudio",

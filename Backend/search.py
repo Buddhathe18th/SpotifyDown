@@ -15,6 +15,7 @@ def find_best_song(isrc, title):
         , "logger": logger.YTDLPPyLogger()
         ,"verbose": True
         ,'flat_playlist': True
+        ,'cookiefile': 'www.youtube.com_cookies.txt'
         ,"skip_download": True
         }) as ydl:
         info = ydl.extract_info(query, download=False)
