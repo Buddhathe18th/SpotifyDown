@@ -26,7 +26,10 @@ sp = spotipy.Spotify(auth_manager=auth_manager)
 
 
 def authentication():
-    pass
+    cookies_content = os.environ.get('YOUTUBE_COOKIES')
+    if cookies_content:
+        with open('cookies.txt', 'w') as f:
+            f.write(cookies_content)
 
 def verify(id):
     try:

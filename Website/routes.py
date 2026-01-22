@@ -66,26 +66,6 @@ def register_routes(app: Flask):
     @app.route('/get_zip/<zip_id>', methods=['GET'])
     def get_zip(zip_id):
         zip_path = f'Songs/{zip_id}.zip'
-    
-        # # Debug: Print current working directory
-        # print(f"Current working directory: {os.getcwd()}", flush=True)
-        
-        # # Debug: List all files in Songs directory
-        # songs_dir = 'Songs'
-        # if os.path.exists(songs_dir):
-        #     print(f"Files in {songs_dir}: {os.listdir(songs_dir)}", flush=True)
-        # else:
-        #     print(f"{songs_dir} directory doesn't exist!", flush=True)
-        
-        # # Check the exact path
-        # print(f"Looking for: {zip_path}", flush=True)
-        # print(f"File exists: {os.path.exists(zip_path)}", flush=True)
-        
-        # # Try absolute path for comparison
-        # abs_path = os.path.abspath(zip_path)
-        # print(f"Absolute path: {abs_path}", flush=True)
-        # print(f"Absolute exists: {os.path.exists(abs_path)}", flush=True)
-
         if not os.path.exists(zip_path):
             return jsonify({"status": "error", "message": f"Zip file not found at {zip_path}"}), 404
     
@@ -93,13 +73,21 @@ def register_routes(app: Flask):
         @after_this_request
         def cleanup(response):
             try:
-                os.remove(zip_path)  # Delete zip after sending
-                # # Also delete the downloads directory if you want
-                # download_dir = f'./downloads/playlist_{zip_id}'
-                # if os.path.exists(download_dir):
-                #     shutil.rmtree(download_dir)
+                # Add a small delay to ensure file is released
+                import threading
+                def delayed_delete():
+                    import time
+                    time.sleep(2)  # Wait 2 seconds for file handle to close
+                    try:
+                        os.remove(zip_path)
+                    except Exception as e:
+                        print(f"Error cleaning up: {e}", flush=True)
+                
+                thread = threading.Thread(target=delayed_delete)
+                thread.daemon = True
+                thread.start()
             except Exception as e:
-                print(f"Error cleaning up: {e}", flush=True)
+                print(f"Error setting up cleanup: {e}", flush=True)
             return response
         
         return send_file(

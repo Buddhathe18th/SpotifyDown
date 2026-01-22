@@ -14,7 +14,7 @@ def download(song): # song dictionary
         "ffmpeg_location": FFMPEG_DIR,   # use repo-local ffmpeg
         "logger": logger.YTDLPPyLogger(),
         "verbose": True,
-        'cookiefile': 'www.youtube.com_cookies.txt', 
+        'cookiefile': 'cookies.txt', 
         "postprocessors": [
             {  # Extract audio using ffmpeg
                 "key": "FFmpegExtractAudio",
