@@ -1,3 +1,4 @@
+from importlib.resources import path
 from Backend.spotipyMain import authentication, store_playlist, verify
 from Backend.youtube import *
 from Backend.search import *
@@ -42,16 +43,12 @@ def main(id, progress_callback=None):
 
     post_tag=time.perf_counter()
 
-    path = "./Songs/"+str(playlist[0]["playlist"])
+    path = os.path.join("Songs", str(playlist[0]["playlist"]))
 
-    if id[:6]=="https:":
-        output_path="./Songs/"+str(id.split("playlist/")[1].split("?")[0])+".zip"
+    if id[:6] == "https:":
+        output_path = os.path.join("Songs", str(id.split("playlist/")[1].split("?")[0]) + ".zip")
     else:
-        output_path="./Songs/"+str(id)+".zip"
-
-
-
-    
+        output_path = os.path.join("Songs", str(id) + ".zip")
 
     zip_directory(path, output_path)
 
