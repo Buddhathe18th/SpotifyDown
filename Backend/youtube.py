@@ -6,15 +6,15 @@ import Backend.logger as logger
 
 FFMPEG_DIR = './ffmpeg-8.0-essentials_build/bin/ffmpeg.exe'
 
-def download(song): # song dictionary
+def download(song,id): # song dictionary
     ydl_opts = {
         # 'quiet': True,
         "format": "bestaudio/best",
-        "outtmpl": "./Songs/"+song["playlist"]+"/"+str(sanitize(song["name"]))+" - "+str(song["artists"])+".%(ext)s",  # save as video title
+        "outtmpl": "./Songs/a/"+str(sanitize(song["name"]))+" - "+str(song["artists"])+".%(ext)s",  # save as video title
         "ffmpeg_location": FFMPEG_DIR,   # use repo-local ffmpeg
         "logger": logger.YTDLPPyLogger(),
         "verbose": True,
-        'cookiefile': 'cookies.txt', 
+        # 'cookiefile': 'cookies.txt', 
         "postprocessors": [
             {  # Extract audio using ffmpeg
                 "key": "FFmpegExtractAudio",
@@ -27,6 +27,7 @@ def download(song): # song dictionary
         print("Downloading:"+str(song["name"]))
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             error_code = ydl.download([song["url"]])
-    except:
+    except Exception as e:
+        print("\n\n\nError downloading "+str(song["name"])+": "+str(e)+"\n\n\n", flush=True)
         with open("skipped.txt", "a", encoding="utf-8") as f:
                 f.write(str(song)+"\n")

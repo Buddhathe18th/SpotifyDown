@@ -4,11 +4,10 @@ from Backend.youtube import *
 from Backend.search import *
 from Backend.metadata import *
 from Backend.output import *
-# from website2 import progress_messages
+
 import time
 
 def main(id, progress_callback=None):
-    # progress_messages.append("AAAAAAAAAAA")
     pre_auth = time.perf_counter()
     authentication()
     post_auth = time.perf_counter()
@@ -19,6 +18,13 @@ def main(id, progress_callback=None):
 
     if progress_callback:
         progress_callback(None, 0, len(playlist))
+    
+    if id[:6] == "https:":
+        output_path = os.path.join("Songs", str(id.split("playlist/")[1].split("?")[0]) + ".zip")
+        playlist_id = id.split("playlist/")[1].split("?")[0]
+    else:
+        output_path = os.path.join("Songs", str(id) + ".zip")
+        playlist_id = id
 
     
     for song in playlist:
@@ -31,7 +37,7 @@ def main(id, progress_callback=None):
                 f.write(str(song)+"\n")
         else:
             print("Found best song for:"+str(song["name"]))
-            download(song)
+            download(song,playlist_id)
             if progress_callback:
                 progress_callback(song, playlist.index(song), len(playlist))
             print("Finish downloading:"+str(song["name"]))
@@ -43,12 +49,7 @@ def main(id, progress_callback=None):
 
     post_tag=time.perf_counter()
 
-    path = os.path.join("Songs", str(playlist[0]["playlist"]))
-
-    if id[:6] == "https:":
-        output_path = os.path.join("Songs", str(id.split("playlist/")[1].split("?")[0]) + ".zip")
-    else:
-        output_path = os.path.join("Songs", str(id) + ".zip")
+    path = os.path.join("Songs", str(playlist_id))
 
     zip_directory(path, output_path)
 
