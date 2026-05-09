@@ -99,6 +99,3 @@ def extract_isrcs_stealth(playlist_url: str):
     dump_payloads_to_disk(captured_jsons)
     print(f"Dumped {len(captured_jsons)} payloads to disk. Please check the folder.")
     return captured_jsons
-
-# Example Usage:
-extract_isrcs_stealth("https://open.spotify.com/playlist/37i9dQZF1DXcBWIGoYBM5M")
